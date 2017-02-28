@@ -22,9 +22,9 @@ cv2.setWindowProperty("Output", cv2.WND_PROP_FULLSCREEN, 1)
 camera = PiCamera()
 camera.resolution = (2592,1944)
 camera.framerate = 32
-hiResCapture = PiRGBArray(camera)
+hiResCapture = PiRGBArray(camera, size=(2592,1944))
 rawCapture = PiRGBArray(camera, size=(320,240))
-hiResStream = camera.capture_continuous(hiResCapture, format="bgr", use_video_port=True)
+hiResStream = camera.capture_continuous(hiResCapture, format="bgr", use_video_port=True, splitter_port=1, resize=(2592,1944))
 lowResStream = camera.capture_continuous(rawCapture, format="bgr", use_video_port=True, splitter_port=2, resize=(320,240))
 
 time.sleep(config["camera_warmup"])
