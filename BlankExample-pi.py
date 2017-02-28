@@ -25,6 +25,7 @@ camera.framerate = 32
 hiResCapture = PiRGBArray(camera)
 rawCapture = PiRGBArray(camera, size=(320,240))
 hiResStream = camera.capture_continuous(hiResCapture, format="bgr", use_video_port=True)
+lowResStream = camera.capture_continuous(rawCapture, format="bgr", use_video_port=True, splitter_port=2, resize=(320,240))
 
 time.sleep(config["camera_warmup"])
 
@@ -48,22 +49,26 @@ def takePhoto(image):
     cv2.imwrite(filename, image)
 
 # main loop
-for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True, splitter_port=2, resize=(320,240)):
+#for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True, splitter_port=2, resize=(320,240)):
+while True:
     # get new frame
-    image = frame.array
+    #image = frame.array
+    lrs = rawCapture.next()
+    image = lrs.array
+    rawCapture.truncate(0)
+
+    hrs = hiResStream.next()
+    hiResCapture.truncate(0)
     # end of new frame
 
     cv2.imshow("Output", image)
 
     if GPIO.input(btnShutter) == False:
-        hires = hiResStream.next()
         hiresImage = hrs.array
         takePhoto(hiresImage)
-        hiResCapture.truncate(0)
         time.sleep(0.5)
 
     # clear buffer
-    rawCapture.truncate(0)
     key = cv2.waitKey(10)
     # end of loop
 
