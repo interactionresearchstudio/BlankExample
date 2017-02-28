@@ -24,7 +24,7 @@ camera.resolution = (2592,1944)
 camera.framerate = 32
 hiResCapture = PiRGBArray(camera)
 rawCapture = PiRGBArray(camera, size=(320,240))
-hiResStream = camera.capture_continuous(highResCapture, format="bgr", use_video_port=True)
+hiResStream = camera.capture_continuous(hiResCapture, format="bgr", use_video_port=True)
 
 time.sleep(config["camera_warmup"])
 
