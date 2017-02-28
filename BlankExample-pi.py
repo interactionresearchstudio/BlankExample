@@ -52,6 +52,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
     cv2.imshow("Output", image)
 
+    if GPIO.input(btnShutter) == False:
+        takePicture(image)
+        time.sleep(0.5)
+
     # clear buffer
     rawCapture.truncate(0)
     key = cv2.waitKey(10)
