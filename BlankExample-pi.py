@@ -53,7 +53,7 @@ def takePhoto(image):
 while True:
     # get new frame
     #image = frame.array
-    lrs = rawCapture.next()
+    lrs = lowResStream.next()
     image = lrs.array
     rawCapture.truncate(0)
 
