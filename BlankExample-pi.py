@@ -9,16 +9,16 @@ import os
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 import RPi.GPIO as GPIO
+# end of imports
 
 # load configuration file
 os.chdir("/home/pi/BlankExample")
 config = json.load(open("config.json"))
 
-# open fullscreen window
 cv2.namedWindow("Output", cv2.WND_PROP_FULLSCREEN)
 cv2.setWindowProperty("Output", cv2.WND_PROP_FULLSCREEN, 1)
 
-# camera settings
+# camera
 camera = PiCamera()
 camera.resolution = (320,240)
 camera.framerate = 32
@@ -38,13 +38,18 @@ GPIO.setup(btn2, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(btn3, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(btn4, GPIO.IN, GPIO.PUD_UP)
 
+def takePhoto(image):
+    timestamp = datetime.datetime.now()
+    filename = timestamp.strftime('%Y-%m-%d-%H-%M-%S')
+    filename = filename + ".jpg"
+    cv2.imwrite(filename, image)
+
 # main loop
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
     # get new frame
     image = frame.array
     # end of new frame
-    
-    # show image
+
     cv2.imshow("Output", image)
 
     # clear buffer
@@ -52,4 +57,5 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     key = cv2.waitKey(10)
     # end of loop
 
+# cleanup
 cv2.destroyWindow("Output")

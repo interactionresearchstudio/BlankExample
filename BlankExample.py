@@ -23,6 +23,12 @@ else:
 time.sleep(config["camera_warmup"])
 # end of camera
 
+def takePhoto(image):
+    timestamp = datetime.datetime.now()
+    filename = timestamp.strftime('%Y-%m-%d-%H-%M-%S')
+    filename = filename + ".jpg"
+    cv2.imwrite(filename, image)
+
 # main loop
 while rval:
     # new frame
@@ -35,6 +41,8 @@ while rval:
     key = cv2.waitKey(10)
     if key == 27:
         break
+    if key == ord('p'):
+        takePhoto(image)     
     # end of loop
 
 # cleanup
