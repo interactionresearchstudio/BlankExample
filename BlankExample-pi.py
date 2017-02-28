@@ -53,7 +53,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     cv2.imshow("Output", image)
 
     if GPIO.input(btnShutter) == False:
-        takePicture(image)
+        takePhoto(image)
         time.sleep(0.5)
 
     # clear buffer
