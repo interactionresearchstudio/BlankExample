@@ -53,11 +53,17 @@ def takePhoto(image):
 while True:
     # get new frame
     #image = frame.array
-    lrs = lowResStream.next()
+    try:
+        lrs = lowResStream.next()
+    except:
+        print("Dropped frame")
     image = lrs.array
     rawCapture.truncate(0)
 
-    hrs = hiResStream.next()
+    try:
+        hrs = hiResStream.next()
+    except:
+        print("Dropped frame")
     hiResCapture.truncate(0)
     # end of new frame
 
