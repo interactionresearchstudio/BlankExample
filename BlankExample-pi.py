@@ -53,24 +53,18 @@ def takePhoto(image):
 while True:
     # get new frame
     #image = frame.array
-    try:
-        lrs = lowResStream.next()
-    except:
-        print("Dropped frame")
+    lrs = lowResStream.next()
     image = lrs.array
     rawCapture.truncate(0)
 
-    try:
-        hrs = hiResStream.next()
-    except:
-        print("Dropped frame")
+    hrs = hiResStream.next()
+    hiresImage = hrs.array
     hiResCapture.truncate(0)
     # end of new frame
 
     cv2.imshow("Output", image)
 
     if GPIO.input(btnShutter) == False:
-        hiresImage = hrs.array
         takePhoto(hiresImage)
         time.sleep(0.5)
 
