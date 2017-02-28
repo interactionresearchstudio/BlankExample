@@ -20,9 +20,12 @@ cv2.setWindowProperty("Output", cv2.WND_PROP_FULLSCREEN, 1)
 
 # camera
 camera = PiCamera()
-camera.resolution = (320,240)
+camera.resolution = (2592,1944)
 camera.framerate = 32
+hiResCapture = PiRGBArray(camera)
 rawCapture = PiRGBArray(camera, size=(320,240))
+hiResStream = camera.capture_continuous(highResCapture, format="bgr", use_video_port=True)
+
 time.sleep(config["camera_warmup"])
 
 # buttons
@@ -45,7 +48,7 @@ def takePhoto(image):
     cv2.imwrite(filename, image)
 
 # main loop
-for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True, splitter_port=2, resize=(320,240)):
     # get new frame
     image = frame.array
     # end of new frame
@@ -53,7 +56,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     cv2.imshow("Output", image)
 
     if GPIO.input(btnShutter) == False:
-        takePhoto(image)
+        hires = hiResStream.next()
+        hiresImage = hrs.array
+        takePhoto(hiresImage)
+        hiResCapture.truncate(0)
         time.sleep(0.5)
 
     # clear buffer
