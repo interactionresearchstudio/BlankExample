@@ -56,10 +56,12 @@ while True:
     lrs = lowResStream.next()
     image = lrs.array
     lowResCapture.truncate(0)
+    lowResCapture.seek()
 
     hrs = hiResStream.next()
     hiresImage = hrs.array
     hiResCapture.truncate(0)
+    hiResCapture.seek()
     # end of new frame
 
     cv2.imshow("Output", image)
