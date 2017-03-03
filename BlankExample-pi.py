@@ -20,12 +20,12 @@ cv2.setWindowProperty("Output", cv2.WND_PROP_FULLSCREEN, 1)
 
 # camera
 camera = PiCamera()
-camera.resolution = (2592,1944)
-camera.framerate = 32
-hiResCapture = PiRGBArray(camera, size=(2592,1944))
-rawCapture = PiRGBArray(camera, size=(320,240))
-hiResStream = camera.capture_continuous(hiResCapture, format="bgr", use_video_port=True, splitter_port=1, resize=(2592,1944))
-lowResStream = camera.capture_continuous(rawCapture, format="bgr", use_video_port=True, splitter_port=2, resize=(320,240))
+camera.resolution = (1024,768)
+camera.framerate = 30
+hiResCapture = PiRGBArray(camera)
+lowResCapture = PiRGBArray(camera, size=(320,240))
+hiResStream = camera.capture_continuous(hiResCapture, format="bgr", use_video_port=True)
+lowResStream = camera.capture_continuous(lowResCapture, format="bgr", use_video_port=True, splitter_port=2, resize=(320,240))
 
 time.sleep(config["camera_warmup"])
 
@@ -55,7 +55,7 @@ while True:
     #image = frame.array
     lrs = lowResStream.next()
     image = lrs.array
-    rawCapture.truncate(0)
+    lowResCapture.truncate(0)
 
     hrs = hiResStream.next()
     hiresImage = hrs.array
